@@ -66,3 +66,17 @@ UNICODE_ENABLE ?= no         # Unicode
 BLUETOOTH_ENABLE ?= no       # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE ?= no           # Audio output on port C6
 FAUXCLICKY_ENABLE ?= no      # Use buzzer to emulate clicky switches
+
+avrdude: build
+	ls /dev/tty.* > /tmp/1; \
+	echo "Reset your Pro Micro now"; \
+	while [ -z $$USB ]; do \
+	  sleep 1; \
+	  ls /dev/tty.* > /tmp/2; \
+	  USB=`diff /tmp/1 /tmp/2 | grep -o '/dev/tty.*'`; \
+	done; \
+	echo Found USB device: $$USB; \
+	echo executing avrdude -p $(MCU) -c avr109 -P $$USB -U flash:w:$(BUILD_DIR)/$(TARGET).hex; \
+	avrdude -p $(MCU) -c avr109 -P $$USB -U flash:w:$(BUILD_DIR)/$(TARGET).hex
+
+.PHONY: avrdude
