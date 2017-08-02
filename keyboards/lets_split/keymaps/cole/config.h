@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define USE_SERIAL
 
 #define MASTER_LEFT
+#define BROKEN_HALF
 // #define _MASTER_RIGHT
 // #define EE_HANDS
 
@@ -28,7 +29,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #ifdef SUBPROJECT_rev2
     #include "../../rev2/config.h"
-#endif
-#ifdef SUBPROJECT_rev2fliphalf
-	#include "../../rev2fliphalf/config.h"
 #endif

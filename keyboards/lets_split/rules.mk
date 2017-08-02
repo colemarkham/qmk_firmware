@@ -1,8 +1,7 @@
 SRC += matrix.c \
 	   i2c.c \
 	   split_util.c \
-	   serial.c \
-	   ssd1306.c
+	   serial.c 
 
 # MCU name
 #MCU = at90usb1287
@@ -83,6 +82,7 @@ avrdude: build
 	  ls /dev/tty* > /tmp/2; \
 	  USB=`diff /tmp/1 /tmp/2 | grep -o '/dev/tty.*'`; \
 	done; \
+	sleep 3; \
 	avrdude -p $(MCU) -c avr109 -P $$USB -U flash:w:$(BUILD_DIR)/$(TARGET).hex
 
 .PHONY: avrdude
