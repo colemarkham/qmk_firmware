@@ -15,10 +15,47 @@
  */
 #include "bunyan.h"
 
+// Each layer gets a name for readability, which is then used in the keymap matrix below.
+// The underscores don't mean anything - you can have a layer called STUFF or any other name.
+// Layer names don't all need to be of the same length, obviously, and you can also skip them
+// entirely and just use numbers.
+#define _NUMLOCK 0
+#define _NAV 1
+#define _ALT 2
+#define _ADJUST 3
+
+// Fillers to make layering more clear
+#define _______ KC_TRNS
+#define XXXXXXX KC_NO
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-[0] = KEYMAP( /* Base */
-  KC_A,  KC_1,  KC_H, \
-    KC_TAB,  KC_SPC   \
+[_NUMLOCK] = KEYMAP( /* Base */
+  KC_NLCK, OUT_BT, OUT_USB, OUT_AUTO,\
+    KC_P7,  KC_P8, KC_P9, KC_PPLS,   \
+    KC_P4,  KC_P5, KC_P6, KC_PEQL,   \
+    KC_P1,  KC_P2, KC_P3, KC_COMM,   \
+    KC_LALT,  KC_P0, KC_PDOT, KC_PENT   \
+),
+[_NAV] = KEYMAP( /* Base */
+  _______, _______, _______, _______,\
+    KC_HOME,  KC_UP, KC_PGUP, _______,   \
+    KC_LEFT,  XXXXXXX, KC_RIGHT, _______,   \
+    KC_END,  KC_DOWN, KC_PGDN, _______,   \
+    _______,  KC_INS, KC_DEL, _______   \
+),
+[_ALT] = KEYMAP( /* Base */
+  _______, KC_MUTE, KC_VOLD, KC_VOLU,\
+    _______,  _______, _______, _______,   \
+    _______,  _______, _______, _______,   \
+    _______,  _______, _______, _______,   \
+    _______,  _______, _______, _______   \
+),
+[_ADJUST] = KEYMAP( /* Base */
+  _______, KC_A, _______, RESET,\
+    RGB_TOG,  RGB_MOD, _______, _______,   \
+    RGB_HUI,  RGB_SAI, RGB_VAI, OUT_AUTO,   \
+    RGB_HUD	,  RGB_SAD, RGB_VAD, OUT_USB,   \
+    _______,  _______, _______, _______   \
 ),
 };
 
@@ -26,33 +63,78 @@ const uint16_t PROGMEM fn_actions[] = {
 
 };
 
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-  // MACRODOWN only works in this function
-      switch(id) {
-        case 0:
-          if (record->event.pressed) {
-            register_code(KC_RSFT);
-          } else {
-            unregister_code(KC_RSFT);
-          }
-        break;
-      }
-    return MACRO_NONE;
-};
+void numlock_led_on(void) {
+  //PORTF |= (1<<7);
 
+}
+
+void numlock_led_off(void) {
+  //PORTF &= ~(1<<7);
+
+}
+
+static bool numlock_down = false;
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+	  case KC_NLCK:
+      if (record->event.pressed) {
+		  numlock_down = true;
+		  if (IS_LAYER_ON(_ALT)) {
+			  layer_on(_ADJUST);
+			  // Don't want to trigger numlock when it's released, so pretend it's no longer down
+			  numlock_down = false;
+		  }
+	  } else{
+		  // If adjust layer was entered, the numlock_down state will not be set which will toggle the numlock state, don't want that
+		  if (!numlock_down)  {return false; }
+		if(!IS_LAYER_ON(_ADJUST)) {
+		  if (!IS_LAYER_ON(_NAV)){
+			  numlock_led_off();
+		    layer_on(_NAV);
+		  } else {
+			  numlock_led_on();
+		    layer_off(_NAV);
+		  }
+		} else {
+			layer_off(_ADJUST);
+		}
+		numlock_down = false;
+	  }
+      return false;
+      break;
+	  case KC_LALT:
+      if (record->event.pressed) {
+		  if (numlock_down) {
+			  layer_on(_ADJUST);
+		  } else {
+			  layer_on(_ALT);
+		  }
+	  } else {
+		  if(IS_LAYER_ON(_ADJUST)) {
+		      layer_off(_ADJUST);
+		  } else {
+			  layer_off(_ALT);
+		  }
+	  }
+	  // Allow normal processing of ALT?
+      return false;
+      break;
+  }
+  return true;
+}
 
 void matrix_init_user(void) {
-
+  // set Numlock LED to output and low
+    //DDRF |= (1<<7);
+    //PORTF &= ~(1<<7);
+	numlock_led_on();
 }
 
 void matrix_scan_user(void) {
 
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  return true;
-}
 
 void led_set_user(uint8_t usb_led) {
 
