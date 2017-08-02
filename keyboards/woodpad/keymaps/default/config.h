@@ -21,4 +21,10 @@
 
 // place overrides here
 
+#undef RGB_DI_PIN
+#undef RGBLED_NUM
+#define RGBLIGHT_ANIMATIONS
+#define RGB_DI_PIN D3
+#define RGBLED_NUM 7
+
 #endif
