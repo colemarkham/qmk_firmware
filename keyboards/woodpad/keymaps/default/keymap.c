@@ -52,9 +52,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [_ADJUST] = KEYMAP( /* Base */
   _______, KC_A, _______, RESET,\
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______,   \
+    RGB_TOG,  RGB_MOD, _______, _______,   \
+    RGB_HUI,  RGB_SAI, RGB_VAI, _______,   \
+    RGB_HUD	,  RGB_SAD, RGB_VAD, _______,   \
     _______,  _______, _______, _______   \
 ),
 };
@@ -65,10 +65,14 @@ const uint16_t PROGMEM fn_actions[] = {
 
 void numlock_led_on(void) {
   PORTF |= (1<<7);
+
+  rgblight_show_solid_color(0, 0, 0xFF);
 }
 
 void numlock_led_off(void) {
   PORTF &= ~(1<<7);
+
+  rgblight_show_solid_color(0, 0xFF, 0);
 }
 
 static bool numlock_down = false;
@@ -80,8 +84,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		  numlock_down = true;
 		  if (IS_LAYER_ON(_ALT)) {
 			  layer_on(_ADJUST);
+			  // Don't want to trigger numlock when it's released, so pretend it's no longer down
+			  numlock_down = false;
 		  }
 	  } else{
+		  // If adjust layer was entered, the numlock_down state will not be set which will toggle the numlock state, don't want that
+		  if (!numlock_down)  {return false; }
 		if(!IS_LAYER_ON(_ADJUST)) {
 		  if (!IS_LAYER_ON(_NAV)){
 			  numlock_led_off();
@@ -122,7 +130,7 @@ void matrix_init_user(void) {
   // set Numlock LED to output and low
     DDRF |= (1<<7);
     PORTF &= ~(1<<7);
-
+	numlock_led_on();
 }
 
 void matrix_scan_user(void) {
