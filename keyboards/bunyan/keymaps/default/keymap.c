@@ -65,12 +65,12 @@ const uint16_t PROGMEM fn_actions[] = {
 
 void numlock_led_on(void) {
   //PORTF |= (1<<7);
-
+	rgblight_show_solid_color(0, 0, 0xFF);
 }
 
 void numlock_led_off(void) {
   //PORTF &= ~(1<<7);
-
+	rgblight_show_solid_color(0, 0xFF, 0);
 }
 
 static bool numlock_down = false;
