@@ -15,24 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef FEATHERBLECONFIG_H
+#define FEATHERBLECONFIG_H
 
 #include "config_common.h"
 
-/* USB Device descriptor parameter */
-#define VENDOR_ID       0xFEED
-#define PRODUCT_ID      0x6069
-#define DEVICE_VER      0x0001
-#define MANUFACTURER    WoodKeys.click
-#define PRODUCT         woodpad
-#define DESCRIPTION     Basic numpad
-
-/* key matrix size */
-#define MATRIX_ROWS 5
-#define MATRIX_COLS 4
-
-#define CATERINA_BOOTLOADER
 /*
  * Keyboard Matrix Assignments
  *
@@ -43,12 +30,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
 */
-#define MATRIX_ROW_PINS { D1, D0, D4, C6, D7 }
-#define MATRIX_COL_PINS { B1, B3, B2, B6 }
+#define MATRIX_ROW_PINS { F1, F0, D2, B5 }
+// Column pins to demux in LSB order
+#define MATRIX_COL_PINS { D6, B7, B6, D1 }
 #define UNUSED_PINS
 
-/* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
-#define DIODE_DIRECTION COL2ROW
+#define CATERINA_BOOTLOADER
+
  
 // #define BACKLIGHT_PIN B7
 // #define BACKLIGHT_BREATHING
