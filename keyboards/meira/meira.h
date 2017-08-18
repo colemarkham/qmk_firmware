@@ -26,6 +26,10 @@
 
 #include "quantum.h"
 
+uint8_t meira_get_backlight_level(void);
+void meira_inc_backlight_level(void);
+void meira_dec_backlight_level(void);
+
 // This a shortcut to help you visually see your layout.
 // The following is an example using the Planck MIT layout
 // The first section contains all of the arguments

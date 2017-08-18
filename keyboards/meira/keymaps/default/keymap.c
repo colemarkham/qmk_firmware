@@ -135,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 		 */
 		[_ADJUST] =  KEYMAP( \
 		  _______, RESET,   _______, KC_MRWD, KC_MPLY, KC_MFFD, KC_PSCR, _______, KC_MUTE, KC_VOLD, KC_VOLU, KC_DEL, \
-		  _______, _______, _______, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  _______, _______, \
+		  BL_DEC, BL_INC, _______, AU_ON,   AU_OFF,  AG_NORM, AG_SWAP, QWERTY,  COLEMAK, DVORAK,  _______, _______, \
 		  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
 		  _______, KC_PSCR, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
 		)
@@ -226,6 +226,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+    case BL_DEC:
+    		meira_dec_backlight_level();
+    	      return false;
+    		break;
+    case BL_INC:
+    		meira_inc_backlight_level();
+    	      return false;
+    		break;
   }
   return true;
 }

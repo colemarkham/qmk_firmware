@@ -15,6 +15,19 @@
  */
 #include "meira.h"
 
+uint8_t meira_backlight_level = 10;
+
+
+uint8_t meira_get_backlight_level(void){
+	return meira_backlight_level;
+}
+void meira_inc_backlight_level(void){
+	meira_backlight_level++;
+}
+void meira_dec_backlight_level(void){
+	meira_backlight_level--;
+}
+
 
 void matrix_scan_kb(void) {
 	// put your looping keyboard code here

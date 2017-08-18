@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #if defined(__AVR__)
 #include <avr/io.h>
 #endif
+#include "meira.h"
 #include "wait.h"
 #include "print.h"
 #include "debug.h"
@@ -62,11 +63,14 @@ static matrix_row_t matrix_debouncing[MATRIX_ROWS];
 
 static const uint8_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
 static const uint8_t col_pins[4] = MATRIX_COL_PINS;
+static const uint8_t lrow_pins[MATRIX_ROWS] = LED_ROW_PINS;
+static const uint8_t lcol_pins[4] = LED_COL_PINS;
 
 /* matrix state(1:on, 0:off) */
 static matrix_row_t matrix[MATRIX_ROWS];
 static matrix_row_t matrix_debouncing[MATRIX_ROWS];
 static void init_rows(void);
+static void init_lcols(void);
 static bool read_rows_on_col(matrix_row_t current_matrix[], uint8_t current_col);
 static void unselect_cols(void);
 static void select_col(uint8_t col);
@@ -119,6 +123,7 @@ void matrix_init(void)
     // initialize row and col
     unselect_cols();
     init_rows();
+    init_lcols();
 
 //    TX_RX_LED_INIT;
 
@@ -162,9 +167,22 @@ uint8_t _matrix_scan(void)
 
 uint8_t matrix_scan(void)
 {
-    uint8_t ret = _matrix_scan();
-    matrix_scan_quantum();
-    return ret;
+	uint8_t ret = _matrix_scan();
+	matrix_scan_quantum();
+	// HACK backlighting
+	for (uint8_t t = 0; t < meira_get_backlight_level(); t++) {
+		for (uint8_t x = 0; x < 13; x++) {
+			for (uint8_t y = 0; y < 4; y++) {
+				uint8_t pin = lcol_pins[y];
+				if ((x >> y) & 1) {
+					_SFR_IO8((pin >> 4) + 2) |=  _BV(pin & 0xF); // HI
+				} else {
+					_SFR_IO8((pin >> 4) + 2) &=  ~_BV(pin & 0xF); // LO
+				}
+			}
+		}
+	}
+	return ret;
 }
 
 bool matrix_is_modified(void)
@@ -211,7 +229,20 @@ static void init_rows(void)
         uint8_t pin = row_pins[x];
         _SFR_IO8((pin >> 4) + 1) &= ~_BV(pin & 0xF); // IN
         _SFR_IO8((pin >> 4) + 2) |=  _BV(pin & 0xF); // HI
+        // HACK backlighting
+        uint8_t lpin = lrow_pins[x];
+        _SFR_IO8((lpin >> 4) + 1) |= _BV(lpin & 0xF); // OUT
+        _SFR_IO8((lpin >> 4) + 2) |=  _BV(lpin & 0xF); // HI
     }
+}
+
+static void init_lcols(void)
+{
+	for (uint8_t x = 0; x < 4; x++) {
+		uint8_t pin = lcol_pins[x];
+		_SFR_IO8((pin >> 4) + 1) |= _BV(pin & 0xF); // OUT
+		_SFR_IO8((pin >> 4) + 2) |= _BV(pin & 0xF); // HIGH
+	}
 }
 
 static bool read_rows_on_col(matrix_row_t current_matrix[], uint8_t current_col)
