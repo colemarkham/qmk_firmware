@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* key matrix size */
 #define MATRIX_ROWS 5
-#define MATRIX_COLS 4
+#define MATRIX_COLS 16
 
 /*
  * Keyboard Matrix Assignments
@@ -43,11 +43,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
 */
 #define MATRIX_ROW_PINS { F6,F5,F4,F1,F0 }
-#define MATRIX_COL_PINS { B6,B5,D7,C6 }
+#define MATRIX_COL_PINS { B6,B7,C6,D6 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
-#define DIODE_DIRECTION COL2ROW
+#define DIODE_DIRECTION CUSTOM_MATRIX
+
+#define CATERINA_BOOTLOADER
  
 // #define BACKLIGHT_PIN B7
 // #define BACKLIGHT_BREATHING

@@ -19,116 +19,59 @@
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
 // Layer names don't all need to be of the same length, obviously, and you can also skip them
 // entirely and just use numbers.
-#define _NUMLOCK 0
-#define _NAV 1
-#define _ALT 2
+#define _DEFAULT 0
+#define _LOWER 1
+#define _RAISE 2
 #define _ADJUST 3
+
+#define XC_ADJ MO(_ADJUST)
+#define XC_RSE MO(_RAISE)
+#define XC_LWR MO(_LOWER)
+#define XC_CTAL LCTL(KC_LALT)
 
 // Fillers to make layering more clear
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-[_NUMLOCK] = KEYMAP( /* Base */
-  KC_NLCK, OUT_BT, OUT_USB, OUT_AUTO,\
-    KC_P7,  KC_P8, KC_P9, KC_PPLS,   \
-    KC_P4,  KC_P5, KC_P6, KC_PEQL,   \
-    KC_P1,  KC_P2, KC_P3, KC_COMM,   \
-    KC_LALT,  KC_P0, KC_PDOT, KC_PENT   \
-),
-[_NAV] = KEYMAP( /* Base */
-  _______, _______, _______, _______,\
-    KC_HOME,  KC_UP, KC_PGUP, _______,   \
-    KC_LEFT,  XXXXXXX, KC_RIGHT, _______,   \
-    KC_END,  KC_DOWN, KC_PGDN, _______,   \
-    _______,  KC_INS, KC_DEL, _______   \
-),
-[_ALT] = KEYMAP( /* Base */
-  _______, KC_MUTE, KC_VOLD, KC_VOLU,\
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______   \
-),
-[_ADJUST] = KEYMAP( /* Base */
-  _______, KC_A, _______, RESET,\
-    RGB_TOG,  RGB_MOD, _______, _______,   \
-    RGB_HUI,  RGB_SAI, RGB_VAI, OUT_AUTO,   \
-    RGB_HUD	,  RGB_SAD, RGB_VAD, OUT_USB,   \
-    _______,  _______, _______, _______   \
-),
+[0]=KEYMAP(
+		KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,   KC_5,      KC_KP_PLUS, KC_SLSH, KC_ASTR,        KC_6,   KC_7,   KC_8,    KC_9,    KC_0,    KC_BSLS,   KC_MINS,
+		KC_ESC,  KC_Q,    KC_W,    KC_E,    KC_R,   KC_T,      KC_KP_7,    KC_KP_8,    KC_KP_9,     KC_Y,   KC_U,   KC_I,    KC_O,    KC_P,    KC_BSPACE, KC_DEL,
+		KC_TAB,  KC_A,    KC_S,    KC_D,    KC_F,   KC_G,      KC_KP_4,    KC_KP_5,    KC_KP_6,     KC_H,   KC_J,   KC_K,    KC_L,    KC_SCLN, KC_QUOT,   KC_PGUP,
+		KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,   KC_B,      KC_KP_1,    KC_KP_2,    KC_KP_3,     KC_N,   KC_M,   KC_COMM, KC_DOT,  KC_SLSH, KC_ENT,    KC_PGDN,
+		XC_ADJ,  KC_LCTL, XC_CTAL, KC_LALT, XC_RSE, KC_LGUI,   KC_KP_0,    KC_DOT,     KC_ENT,      KC_SPC, XC_LWR, KC_LEFT, KC_DOWN, KC_UP,   KC_RIGHT,   KC_RALT ),
+
+[_LOWER]=KEYMAP(
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______),
+[_RAISE]=KEYMAP(
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______,   _______, _______, _______,          _______, _______, _______, _______, _______, _______, _______),
+[_ADJUST]=KEYMAP(
+		_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, RESET, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, OUT_AUTO, OUT_USB, OUT_BT, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,
+		_______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______),
+
 };
 
 const uint16_t PROGMEM fn_actions[] = {
 
 };
 
-void numlock_led_on(void) {
-  //PORTF |= (1<<7);
-	rgblight_show_solid_color(0, 0, 0xFF);
-}
-
-void numlock_led_off(void) {
-  //PORTF &= ~(1<<7);
-	rgblight_show_solid_color(0, 0xFF, 0);
-}
-
-static bool numlock_down = false;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-	  case KC_NLCK:
-      if (record->event.pressed) {
-		  numlock_down = true;
-		  if (IS_LAYER_ON(_ALT)) {
-			  layer_on(_ADJUST);
-			  // Don't want to trigger numlock when it's released, so pretend it's no longer down
-			  numlock_down = false;
-		  }
-	  } else{
-		  // If adjust layer was entered, the numlock_down state will not be set which will toggle the numlock state, don't want that
-		  if (!numlock_down)  {return false; }
-		if(!IS_LAYER_ON(_ADJUST)) {
-		  if (!IS_LAYER_ON(_NAV)){
-			  numlock_led_off();
-		    layer_on(_NAV);
-		  } else {
-			  numlock_led_on();
-		    layer_off(_NAV);
-		  }
-		} else {
-			layer_off(_ADJUST);
-		}
-		numlock_down = false;
-	  }
-      return false;
-      break;
-	  case KC_LALT:
-      if (record->event.pressed) {
-		  if (numlock_down) {
-			  layer_on(_ADJUST);
-		  } else {
-			  layer_on(_ALT);
-		  }
-	  } else {
-		  if(IS_LAYER_ON(_ADJUST)) {
-		      layer_off(_ADJUST);
-		  } else {
-			  layer_off(_ALT);
-		  }
-	  }
-	  // Allow normal processing of ALT?
-      return false;
-      break;
-  }
   return true;
 }
 
 void matrix_init_user(void) {
-  // set Numlock LED to output and low
-    //DDRF |= (1<<7);
-    //PORTF &= ~(1<<7);
-	numlock_led_on();
 }
 
 void matrix_scan_user(void) {
