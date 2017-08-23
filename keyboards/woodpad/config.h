@@ -42,12 +42,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
 */
-#define MATRIX_ROW_PINS { D1, D0, D4, C6, D7 }
-#define MATRIX_COL_PINS { B1, B3, B2, B6 }
+#define MATRIX_ROW_PINS { F1, D6, F0, B7, D2 }
+#define MATRIX_COL_PINS { F7, F6, F5, F4 }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
 #define DIODE_DIRECTION COL2ROW
+
+#define CATERINA_BOOTLOADER
  
 // #define BACKLIGHT_PIN B7
 // #define BACKLIGHT_BREATHING

@@ -13,7 +13,7 @@ MCU = atmega32u4
 #     does not *change* the processor frequency - it should merely be updated to
 #     reflect the processor speed set externally so that the code can use accurate
 #     software delays.
-F_CPU = 16000000
+F_CPU = 8000000
 
 
 #
@@ -63,7 +63,7 @@ NKRO_ENABLE ?= no            # USB Nkey Rollover
 BACKLIGHT_ENABLE ?= no       # Enable keyboard backlight functionality on B7 by default
 MIDI_ENABLE ?= no            # MIDI support (+2400 to 4200, depending on config)
 UNICODE_ENABLE ?= no         # Unicode
-BLUETOOTH_ENABLE ?= no       # Enable Bluetooth with the Adafruit EZ-Key HID
+BLUETOOTH_ENABLE ?= yes       # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE ?= no           # Audio output on port C6
 FAUXCLICKY_ENABLE ?= no      # Use buzzer to emulate clicky switches
 
