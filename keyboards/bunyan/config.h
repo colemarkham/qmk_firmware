@@ -19,6 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CONFIG_H
 
 #include "config_common.h"
+// AdafruitBLE needs this, not sure why it isn't included by default
+#include <avr/pgmspace.h>
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xFEED

@@ -71,6 +71,8 @@ FAUXCLICKY_ENABLE ?= no      # Use buzzer to emulate clicky switches
 
 CUSTOM_MATRIX = yes
 
+BLUETOOTH=AdafruitBLE
+
 avrdude: build
 	ls /dev/tty.* > /tmp/1; \
 	echo "Reset your controller now"; \
