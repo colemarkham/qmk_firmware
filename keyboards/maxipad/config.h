@@ -32,6 +32,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_ROWS 5
 #define MATRIX_COLS 6
 
+#undef RGB_DI_PIN
+#undef RGBLED_NUM
+#define RGBLIGHT_ANIMATIONS
+#define RGB_DI_PIN D3
+#define RGBLED_NUM 6
+#define RGBLIGHT_HUE_STEP 8
+#define RGBLIGHT_SAT_STEP 8
+#define RGBLIGHT_VAL_STEP 8
+
+
 /*
  * Keyboard Matrix Assignments
  *
@@ -53,7 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 /* COL2ROW or ROW2COL */
-#define DIODE_DIRECTION COL2ROW
+#define DIODE_DIRECTION COL2ROW	
 
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST
