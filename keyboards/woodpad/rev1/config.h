@@ -18,28 +18,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "config_common.h"
-
 /* USB Device descriptor parameter */
-#define VENDOR_ID       0xFEED
-#define PRODUCT_ID      0x6069
-#define MANUFACTURER    WoodKeys.click
-#define PRODUCT         woodpad
-#define DESCRIPTION     Basic numpad
+#define DEVICE_VER      0x0001
 
-/* key matrix size */
-#define MATRIX_ROWS 5
-#define MATRIX_COLS 4
+/*
+ * Keyboard Matrix Assignments
+ *
+ * Change this to how you wired your keyboard
+ * COLS: AVR pins used for columns, left to right
+ * ROWS: AVR pins used for rows, top to bottom
+ * DIODE_DIRECTION: COL2ROW = COL = Anode (+), ROW = Cathode (-, marked on diode)
+ *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
+ *
+*/
+#define MATRIX_ROW_PINS { D1, D0, D4, C6, D7 }
+#define MATRIX_COL_PINS { B1, B3, B2, B6 }
+#define UNUSED_PINS
 
-#ifdef SUBPROJECT_rev1
-    #include "rev1/config.h"
-#endif
-#ifdef SUBPROJECT_rev2_promicro
-    #include "rev2_promicro/config.h"
-#endif
-#ifdef SUBPROJECT_rev2_featherble
-    #include "rev2_featherble/config.h"
-#endif
+/* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
+#define DIODE_DIRECTION COL2ROW
+
+/* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
+#define DEBOUNCING_DELAY 5
 
 
 #endif

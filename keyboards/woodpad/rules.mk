@@ -13,7 +13,8 @@ MCU = atmega32u4
 #     does not *change* the processor frequency - it should merely be updated to
 #     reflect the processor speed set externally so that the code can use accurate
 #     software delays.
-F_CPU = 8000000
+## Defined in subproject
+#F_CPU = 8000000
 
 
 #
@@ -67,7 +68,6 @@ BLUETOOTH_ENABLE ?= yes       # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE ?= no           # Audio output on port C6
 FAUXCLICKY_ENABLE ?= no      # Use buzzer to emulate clicky switches
 
-BLUETOOTH=AdafruitBLE
 
 avrdude: build
 	ls /dev/tty.* > /tmp/1; \

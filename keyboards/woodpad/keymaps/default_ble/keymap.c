@@ -52,9 +52,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [_ADJUST] = KEYMAP( /* Base */
   _______, _______, _______, RESET,\
-    RGB_TOG,  RGB_MOD, _______, _______,   \
-    RGB_HUI,  RGB_SAI, RGB_VAI, _______,   \
-    RGB_HUD	,  RGB_SAD, RGB_VAD, _______,   \
+    RGB_TOG,  RGB_MOD, _______, OUT_AUTO,   \
+    RGB_HUI,  RGB_SAI, RGB_VAI, OUT_USB,   \
+    RGB_HUD	,  RGB_SAD, RGB_VAD, OUT_BT,   \
     _______,  _______, _______, _______   \
 ),
 };
