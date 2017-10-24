@@ -14,6 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "woodpad.h"
+#include "rgblight.h"
 
 // Each layer gets a name for readability, which is then used in the keymap matrix below.
 // The underscores don't mean anything - you can have a layer called STUFF or any other name.
@@ -30,33 +31,19 @@
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_NUMLOCK] = KEYMAP( /* Base */
-  LT(_ADJUST, KC_NLCK), KC_PSLS, KC_PAST, KC_PMNS,\
+  MO(_ADJUST), KC_PSLS, KC_PAST, KC_PMNS,\
     KC_P7,  KC_P8, KC_P9, KC_PPLS,   \
     KC_P4,  KC_P5, KC_P6, KC_PEQL,   \
-    KC_P1,  KC_P2, KC_P3, KC_COMM,   \
+    KC_P1,  KC_P2, KC_P3, KC_COMMA,   \
     KC_LALT,  KC_P0, KC_PDOT, KC_PENT   \
-),
-[_NAV] = KEYMAP( /* Base */
-  _______, _______, _______, _______,\
-    KC_HOME,  KC_UP, KC_PGUP, _______,   \
-    KC_LEFT,  XXXXXXX, KC_RIGHT, _______,   \
-    KC_END,  KC_DOWN, KC_PGDN, _______,   \
-    _______,  KC_INS, KC_DEL, _______   \
-),
-[_ALT] = KEYMAP( /* Base */
-  _______, KC_MUTE, KC_VOLD, KC_VOLU,\
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______,   \
-    _______,  _______, _______, _______   \
 ),
 [_ADJUST] = KEYMAP( /* Base */
   _______, _______, _______, RESET,\
-    RGB_TOG,  RGB_MOD, _______, _______,   \
-    RGB_HUI,  RGB_SAI, RGB_VAI, _______,   \
-    RGB_HUD	,  RGB_SAD, RGB_VAD, _______,   \
+    RGB_TOG,  RGB_MOD, _______, OUT_AUTO,   \
+    RGB_HUI,  RGB_SAI, RGB_VAI, OUT_USB,   \
+    RGB_HUD	,  RGB_SAD, RGB_VAD, OUT_BT,   \
     _______,  _______, _______, _______   \
-),
+)
 };
 
 const uint16_t PROGMEM fn_actions[] = {
@@ -66,47 +53,48 @@ const uint16_t PROGMEM fn_actions[] = {
 void numlock_led_on(void) {
 //  PORTF |= (1<<7);
 
-  rgblight_show_solid_color(0, 0, 0xFF);
+ // rgblight_show_solid_color(0, 0, 0xFF);
 }
 
 void numlock_led_off(void) {
 //  PORTF &= ~(1<<7);
 
-  rgblight_show_solid_color(0, 0xFF, 0);
+//  rgblight_show_solid_color(0, 0xFF, 0);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  switch (keycode) {
-	  case KC_NLCK:
-      if (!record->event.pressed) {
-		  if (!IS_LAYER_ON(_NAV)){
-			  numlock_led_off();
-			layer_on(_NAV);
-		  } else {
-			  numlock_led_on();
-			layer_off(_NAV);
-		  }
-	  } 
-      return false;
-      break;
-	  case KC_LALT:
-      if (record->event.pressed) {
-		  layer_on(_ALT);
-	  } else {
-		  layer_off(_ALT);
-	  }
-	  // Allow normal processing of ALT?
-      return false;
-      break;
-  }
+//  switch (keycode) {
+//	  case KC_NLCK:
+//      if (!record->event.pressed) {
+//		  if (!IS_LAYER_ON(_NAV)){
+//			  numlock_led_off();
+//			layer_on(_NAV);
+//		  } else {
+//			  numlock_led_on();
+//			layer_off(_NAV);
+//		  }
+//	  }
+//      return false;
+//      break;
+//	  case KC_LALT:
+//      if (record->event.pressed) {
+//		  layer_on(_ALT);
+//	  } else {
+//		  layer_off(_ALT);
+//	  }
+//	  // Allow normal processing of ALT?
+//      return false;
+//      break;
+//  }
   return true;
 }
 
 void matrix_init_user(void) {
+	rgblight_show_solid_color(0, 0xFF, 0);
   // set Numlock LED to output and low
 //    DDRF |= (1<<7);
 //    PORTF &= ~(1<<7);
-	numlock_led_on();
+//	numlock_led_on();
 }
 
 void matrix_scan_user(void) {

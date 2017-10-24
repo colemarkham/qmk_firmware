@@ -1,1 +1,5 @@
 F_CPU = 16000000
+
+F_USB = $(F_CPU)
+
+RGBLIGHT_ENABLE = yes

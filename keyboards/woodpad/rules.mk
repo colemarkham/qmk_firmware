@@ -23,18 +23,6 @@ MCU = atmega32u4
 # Target architecture (see library "Board Types" documentation).
 ARCH = AVR8
 
-# Input clock frequency.
-#     This will define a symbol, F_USB, in all source code files equal to the
-#     input clock frequency (before any prescaling is performed) in Hz. This value may
-#     differ from F_CPU if prescaling is used on the latter, and is required as the
-#     raw input clock is fed directly to the PLL sections of the AVR for high speed
-#     clock generation for the USB and other AVR subsections. Do NOT tack on a 'UL'
-#     at the end, this will be done automatically to create a 32-bit value in your
-#     source code.
-#
-#     If no clock division is performed on the input clock inside the AVR (via the
-#     CPU clock adjust registers or the clock division fuses), this will be equal to F_CPU.
-F_USB = $(F_CPU)
 
 # Interrupt driven control endpoint task(+60)
 OPT_DEFS += -DINTERRUPT_CONTROL_ENDPOINT
@@ -67,18 +55,3 @@ UNICODE_ENABLE ?= no         # Unicode
 BLUETOOTH_ENABLE ?= yes       # Enable Bluetooth with the Adafruit EZ-Key HID
 AUDIO_ENABLE ?= no           # Audio output on port C6
 FAUXCLICKY_ENABLE ?= no      # Use buzzer to emulate clicky switches
-
-
-avrdude: build
-	ls /dev/tty.* > /tmp/1; \
-	echo "Reset your Pro Micro now"; \
-	while [ -z $$USB ]; do \
-	  sleep 1; \
-	  ls /dev/tty.* > /tmp/2; \
-	  USB=`diff /tmp/1 /tmp/2 | grep -o '/dev/tty.*'`; \
-	done; \
-	echo Found USB device: $$USB; \
-	echo executing avrdude -p $(MCU) -c avr109 -P $$USB -U flash:w:$(BUILD_DIR)/$(TARGET).hex; \
-	avrdude -p $(MCU) -c avr109 -P $$USB -U flash:w:$(BUILD_DIR)/$(TARGET).hex
-
-.PHONY: avrdude

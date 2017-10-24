@@ -41,5 +41,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     #include "rev2_featherble/config.h"
 #endif
 
+/* key combination for command */
+#define IS_COMMAND() ( \
+    false \
+)
 
 #endif
