@@ -15,10 +15,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef EH1_CONFIG_H
+#define EH1_CONFIG_H
 
-#include "config_common.h"
+#include "../config.h"
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x1337
@@ -26,16 +26,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MANUFACTURER    Maple Computing
 #define PRODUCT         Let''s Macro Macro Pad
 #define DESCRIPTION     A 4x6 Macro Pad
+#define DEVICE_VER      0x0001
+
+
+/* ECO V1 pin-out */
+#define MATRIX_ROW_PINS { D3, E6, F4, F5 }
+#define MATRIX_COL_PINS { B0, F0, F1, C7, B6, B5 }
+#define UNUSED_PINS
 
 /* key matrix size */
-#define MATRIX_ROWS 4
+// Rows are doubled-up
+#define MATRIX_ROWS 8
 #define MATRIX_COLS 6
-
-/* COL2ROW or ROW2COL */
-#define DIODE_DIRECTION COL2ROW
-
-/* define if matrix has ghost */
-//#define MATRIX_HAS_GHOST
 
 /* Set 0 if debouncing isn't needed */
 #define DEBOUNCING_DELAY 5
@@ -50,26 +52,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     keyboard_report->mods == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT)) \
 )
 
-/*
- * Feature disable options
- *  These options are also useful to firmware size reduction.
- */
-
-/* disable debug print */
-//#define NO_DEBUG
-
-/* disable print */
-//#define NO_PRINT
-
-/* disable action features */
-//#define NO_ACTION_LAYER
-//#define NO_ACTION_TAPPING
-//#define NO_ACTION_ONESHOT
-//#define NO_ACTION_MACRO
-//#define NO_ACTION_FUNCTION
-
-#ifdef SUBPROJECT_rev1
-    #include "eh1/config.h"
-#endif
-
+/* ws2812 RGB LED */
+#define RGB_DI_PIN D3
+#define RGBLIGHT_TIMER
+#define RGBLED_NUM 12    // Number of LEDs
+#define ws2812_PORTREG  PORTD
+#define ws2812_DDRREG   DDRD
 #endif
