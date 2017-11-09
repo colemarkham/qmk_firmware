@@ -45,9 +45,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_QWERTY] = KEYMAP(
   KC_ESC,  KC_Q,   KC_W,    KC_E,   KC_R,     KC_T,     
-  MO(_FN1),  KC_A,   KC_S,    KC_D,   KC_F,     KC_G,     
+  KC_1,  KC_A,   KC_S,    KC_D,   KC_F,     KC_G,
   KC_LSFT, KC_Z,   KC_X,    KC_C,   KC_V,     KC_B,    
-  KC_LCTL, KC_LGUI,KC_LALT, KC_DEL, KC_SPC, MO(_FN2)
+  KC_LCTL, KC_LGUI,KC_LALT, KC_DEL, KC_SPC, KC_2
 ),
 
 /* FN1
