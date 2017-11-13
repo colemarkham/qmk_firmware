@@ -21,3 +21,9 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 
 void matrix_scan_user(void) {
 };
+
+void matrix_init_user() {
+    // HACK Enable backlight
+    DDRB |= (1<<5) | (1<<6);
+    PORTB |= (1<<5) | (1<<6);
+};
