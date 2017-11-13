@@ -20,16 +20,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <stdint.h>
 #include <stdbool.h>
+#if defined(__AVR__)
 #include <avr/io.h>
+#endif
 #include "wait.h"
 #include "print.h"
 #include "debug.h"
 #include "util.h"
 #include "matrix.h"
 #include "split_util.h"
+#ifdef PRO_MICRO
 #include "pro_micro.h"
+#endif
 #include "config.h"
 #include "timer.h"
+#ifdef BACKLIGHT_ENABLE
+#include "backlight.h"
+#endif
 
 #ifdef USE_I2C
 #  include "i2c.h"
@@ -54,15 +61,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #else
 #    error "Currently only supports 8 COLS"
 #endif
-static matrix_row_t matrix_debouncing[MATRIX_ROWS];
 
 #define ERROR_DISCONNECT_COUNT 5
+
+#define SERIAL_LED_ADDR 0x00
 
 #define ROWS_PER_HAND (MATRIX_ROWS/2)
 
 static uint8_t error_count = 0;
 
-static const uint8_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
+static const uint8_t row_pins[ROWS_PER_HAND] = MATRIX_ROW_PINS;
 static const uint8_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
 /* matrix state(1:on, 0:off) */
@@ -111,27 +119,35 @@ void matrix_scan_user(void) {
 }
 
 inline
-uint8_t matrix_rows(void)
-{
+uint8_t matrix_rows(void) {
     return MATRIX_ROWS;
 }
 
 inline
-uint8_t matrix_cols(void)
-{
+uint8_t matrix_cols(void) {
     return MATRIX_COLS;
 }
 
 void matrix_init(void)
 {
-    debug_enable = true;
-    debug_matrix = true;
-    debug_mouse = true;
+    // To use PORTF disable JTAG with writing JTD bit twice within four cycles.
+    #if  (defined(__AVR_AT90USB1286__) || defined(__AVR_AT90USB1287__) || defined(__AVR_ATmega32U4__))
+        MCUCR |= _BV(JTD);
+        MCUCR |= _BV(JTD);
+    #endif
+    
     // initialize row and col
+#if (DIODE_DIRECTION == COL2ROW)
     unselect_rows();
     init_cols();
+#elif (DIODE_DIRECTION == ROW2COL)
+    unselect_cols();
+    init_rows();
+#endif
 
+#ifdef PRO_MICRO
     TX_RX_LED_INIT;
+#endif
 
     // initialize matrix state: all keys off
     for (uint8_t i=0; i < MATRIX_ROWS; i++) {
@@ -237,6 +253,11 @@ int serial_transaction(void) {
     for (int i = 0; i < ROWS_PER_HAND; ++i) {
         matrix[slaveOffset+i] = serial_slave_buffer[i];
     }
+
+#ifdef BACKLIGHT_ENABLE
+    // Write backlight level for slave to read
+    serial_master_buffer[SERIAL_LED_ADDR] = get_backlight_level();
+#endif
     return 0;
 }
 #endif
@@ -251,7 +272,9 @@ uint8_t matrix_scan(void)
     if( serial_transaction() ) {
 #endif
         // turn on the indicator led when halves are disconnected
+        #ifdef PRO_MICRO
         TXLED1;
+        #endif
 
         error_count++;
 
@@ -264,7 +287,9 @@ uint8_t matrix_scan(void)
         }
     } else {
         // turn off the indicator led on no error
+        #ifdef PRO_MICRO
         TXLED0;
+        #endif
         error_count = 0;
     }
     matrix_scan_quantum();
@@ -284,12 +309,19 @@ void matrix_slave_scan(void) {
     for (int i = 0; i < ROWS_PER_HAND; ++i) {
         serial_slave_buffer[i] = matrix[offset+i];
     }
+
+#ifdef BACKLIGHT_ENABLE
+    // Read backlight level sent from master and update level on slave
+    backlight_set(serial_master_buffer[SERIAL_LED_ADDR]);
+#endif
 #endif
 }
 
 bool matrix_is_modified(void)
 {
+#if (DEBOUNCING_DELAY > 0)
     if (debouncing) return false;
+#endif
     return true;
 }
 

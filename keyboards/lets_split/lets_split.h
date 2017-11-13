@@ -6,7 +6,11 @@
 #ifdef KEYBOARD_lets_split_rev1
     #include "rev1.h"
 #else
-    #include "rev2.h"
+	#ifdef KEYBOARD_lets_split_rev2
+		#include "rev2.h"
+#else
+#include "eh1.h"
+	#endif
 #endif
 
 // Used to create a keymap using only KC_ prefixed keys
