@@ -1,4 +1,4 @@
-#include "../../bigswitch.h"
+#include "bigswitch.h"
 
 enum custom_keycodes {
   BL1 = SAFE_RANGE,
@@ -44,7 +44,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
   case KC_A:
     if (record->event.pressed) {
-      SEND_STRING(":salty:\n");
+      SEND_STRING("Merry Christmas (a little late), from WoodKeys!!\n");
       return false;
     }
   }
