@@ -20,9 +20,6 @@
 #define MATRIX_COL_PINS { B4 }
 #define UNUSED_PINS
 
-/* Pins for custom per-row LEDs. Should be changed to use named pins. */
-#define LED_ROW_PINS { B1, B2, B3 }
-
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
 
