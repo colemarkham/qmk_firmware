@@ -87,19 +87,19 @@ int prevR = redVal;
 int prevG = grnVal;
 int prevB = bluVal;
 
-// Set up the LED outputs
-void setup()
-{
-    TXLED1;
-        RXLED1;
-  pinMode(redPin, OUTPUT);   // sets the pins as output
-  pinMode(grnPin, OUTPUT);
-  pinMode(bluPin, OUTPUT);
-
-  if (DEBUG) {           // If we want to see values for debugging...
-    Serial.begin(9600);  // ...set up the serial ouput
-  }
-}
+//// Set up the LED outputs
+//void setup()
+//{
+//    TXLED1;
+//        RXLED1;
+//  pinMode(redPin, OUTPUT);   // sets the pins as output
+//  pinMode(grnPin, OUTPUT);
+//  pinMode(bluPin, OUTPUT);
+//
+//  if (DEBUG) {           // If we want to see values for debugging...
+//    Serial.begin(9600);  // ...set up the serial ouput
+//  }
+//}
 
 // Main program: list the order of crossfades
 void loop()
@@ -187,6 +187,7 @@ int calculateVal(int step, int val, int i) {
 */
 
 void crossFade(int color[3]) {
+  print("Crossfading to color: ")
   // Convert to 0-255
   int R = (color[0] * 255) / 100;
   int G = (color[1] * 255) / 100;
