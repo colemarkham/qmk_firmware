@@ -20,6 +20,8 @@
 #define MATRIX_COL_PINS { B4 }
 #define UNUSED_PINS
 
+#define RGBLED_PINS { B1, B2, B3 }
+
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
 
@@ -38,6 +40,12 @@
 #define RGB_DI_PIN D3
 #define RGBLIGHT_ANIMATIONS
 #define RGBLED_NUM 3
+#endif
+
+#ifdef BACKLIGHT_ENABLE
+//#define BACKLIGHT_PIN B1
+#define BACKLIGHT_LEVELS 5
+#define BACKLIGHT_ON_STATE 1
 #endif
 
 #endif
