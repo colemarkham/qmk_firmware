@@ -25,6 +25,12 @@
 #define _ALT 2
 #define _ADJUST 3
 
+enum custom_keycodes {
+  WK_RED = SAFE_RANGE,
+  WK_GREEN,
+  WK_BLUE
+};
+
 // Fillers to make layering more clear
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
@@ -39,10 +45,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [_ADJUST] = KEYMAP( /* Base */
   _______, _______, _______, RESET,\
-    RGB_TOG,  RGB_MOD, _______, OUT_AUTO,   \
+    RGB_TOG,  RGB_MOD, RGB_MODE_PLAIN, OUT_AUTO,   \
     RGB_HUI,  RGB_SAI, RGB_VAI, OUT_USB,   \
     RGB_HUD	,  RGB_SAD, RGB_VAD, OUT_BT,   \
-    _______,  _______, _______, _______   \
+    WK_RED,  WK_GREEN, WK_BLUE, _______   \
 )
 };
 
@@ -53,7 +59,7 @@ const uint16_t PROGMEM fn_actions[] = {
 void numlock_led_on(void) {
 //  PORTF |= (1<<7);
 
- // rgblight_show_solid_color(0, 0, 0xFF);
+//  rgblight_show_solid_color(0, 0, 0xFF);
 }
 
 void numlock_led_off(void) {
@@ -63,7 +69,32 @@ void numlock_led_off(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-//  switch (keycode) {
+  switch (keycode) {
+  case WK_RED:
+    if (record->event.pressed) {
+      rgblight_show_solid_color(0xFF, 0, 0);
+    } else {
+      rgblight_show_solid_color(0xFF, 0xFF, 0xFF);
+    }
+    return false;
+    break;
+  case WK_GREEN:
+    if (record->event.pressed) {
+      rgblight_show_solid_color(0, 0xFF, 0);
+    } else {
+      rgblight_show_solid_color(0xFF, 0xFF, 0xFF);
+    }
+    return false;
+    break;
+  case WK_BLUE:
+    if (record->event.pressed) {
+      rgblight_show_solid_color(0, 0, 0xFF);
+    } else {
+      rgblight_show_solid_color(0xFF, 0xFF, 0xFF);
+    }
+    return false;
+    break;
+  }
 //	  case KC_NLCK:
 //      if (!record->event.pressed) {
 //		  if (!IS_LAYER_ON(_NAV)){

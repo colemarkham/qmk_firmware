@@ -25,6 +25,6 @@
 #undef RGBLED_NUM
 #define RGBLIGHT_ANIMATIONS
 #define RGB_DI_PIN F4
-#define RGBLED_NUM 3
+#define RGBLED_NUM 4
 
 #endif
