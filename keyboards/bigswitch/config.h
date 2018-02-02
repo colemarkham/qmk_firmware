@@ -20,7 +20,7 @@
 #define MATRIX_COL_PINS { B4 }
 #define UNUSED_PINS
 
-#define RGBLED_PINS { B1, B2, B3 }
+#define RGBLED_PINS { B5, B6, B7 }
 
 /* COL2ROW or ROW2COL */
 #define DIODE_DIRECTION COL2ROW
