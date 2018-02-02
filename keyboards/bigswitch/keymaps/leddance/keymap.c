@@ -1,6 +1,8 @@
 #include "bigswitch.h"
 #include "print.h"
 
+extern rgblight_config_t rgblight_config;
+
 enum custom_keycodes {
   BL = SAFE_RANGE
 };
@@ -32,6 +34,12 @@ void dance_toggle (qk_tap_dance_state_t *state, void *user_data) {
       ledState = (ledState + 1) % 8;
       xprintf("LED Layer, toggling value: %d\n", ledState);
       update_leds();
+#ifdef RGBLIGHT_ENABLE
+      if (!rgblight_config.enable) {
+        rgblight_enable();
+      }
+      rgblight_step();
+#endif
     } else {
       println("Base layer, sending string");
       SEND_STRING("This thing is BIG!!\n");
