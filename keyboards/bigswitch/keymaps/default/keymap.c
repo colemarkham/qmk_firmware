@@ -7,7 +7,7 @@ enum custom_keycodes {
   BL4
 };
 
-const uint8_t LED_PINS[] = LED_ROW_PINS;
+//const uint8_t LED_PINS[] = LED_ROW_PINS;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -16,6 +16,9 @@ KEYMAP(
 
 
 };
+
+
+bool initialized = 0;
 
 //void set_led(int idx, bool enable) {
 //  uint8_t pin = LED_PINS[idx];
@@ -35,6 +38,15 @@ void matrix_init_user(void) {
   /* set LED row pins to output and low */
 //  DDRB |= (1 << 4) | (1 << 5) | (1 << 6) | (1 << 7);
 //  PORTB &= ~(1 << 4) & ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
+  if (!initialized){
+      debug_config.enable = true;
+      dprintf("Initializing in matrix_scan_user");
+      rgblight_enable();
+      rgblight_mode(7);
+      rgblight_sethsv(0,255,255);
+      rgblight_setrgb(0x00, 0x00, 0xFF);
+      initialized = 1;
+    }
 }
 
 void matrix_scan_user(void) {
@@ -44,7 +56,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
   case KC_A:
     if (record->event.pressed) {
-      SEND_STRING("Merry Christmas (a little late), from WoodKeys!!\n");
+      SEND_STRING("Howdy!!\n");
       return false;
     }
   }
