@@ -1,13 +1,6 @@
 #include "bigswitch.h"
 
-enum custom_keycodes {
-  BL1 = SAFE_RANGE,
-  BL2,
-  BL3,
-  BL4
-};
-
-//const uint8_t LED_PINS[] = LED_ROW_PINS;
+//const uint8_t LED_PINS[] = RGBLED_PINS;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -18,17 +11,23 @@ KEYMAP(
 };
 
 
+void update_leds(void);
+uint8_t ledState = 0;
 bool initialized = 0;
 
-//void set_led(int idx, bool enable) {
-//  uint8_t pin = LED_PINS[idx];
-//  if (enable) {
-//    _SFR_IO8((pin >> 4) + 2) |= _BV(pin & 0xF);
-//  } else {
-//    /* PORTx &= ~n */
-//    _SFR_IO8((pin >> 4) + 2) &= ~_BV(pin & 0xF);
-//  }
-//}
+void set_led(uint8_t pin, uint8_t enable) {
+  if (enable) {
+    PORTB |= (1 << pin);
+  } else {
+    PORTB &= ~(1 << pin);
+  }
+}
+
+void update_leds(void) {
+  for (uint8_t idx = 0; idx < 3; idx++){
+    set_led(idx+5, (ledState >> idx) & 1);
+  }
+}
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
   return MACRO_NONE ;
@@ -36,8 +35,8 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
 
 void matrix_init_user(void) {
   /* set LED row pins to output and low */
-//  DDRB |= (1 << 4) | (1 << 5) | (1 << 6) | (1 << 7);
-//  PORTB &= ~(1 << 4) & ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
+  DDRB |= (1 << 5) | (1 << 6) | (1 << 7);
+  PORTB &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
   if (!initialized){
       debug_config.enable = true;
       dprintf("Initializing in matrix_scan_user");
@@ -45,6 +44,8 @@ void matrix_init_user(void) {
       rgblight_mode(7);
       rgblight_sethsv(0,255,255);
       rgblight_setrgb(0x00, 0x00, 0xFF);
+      ledState = 1;
+      update_leds();
       initialized = 1;
     }
 }
@@ -56,39 +57,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
   case KC_A:
     if (record->event.pressed) {
+      ledState = (ledState + 1) % 8;
+      xprintf("LED Layer, toggling value: %d\n", ledState);
+      update_leds();
       SEND_STRING("Howdy!!\n");
       return false;
     }
   }
-//  case BL1:
-//    if (record->event.pressed) {
-//      PORTB |= (1 << 4);
-//    } else {
-//      PORTB &= ~(1 << 4);
-//    }
-//    return false;
-//  case BL2:
-//    if (record->event.pressed) {
-//      PORTB |= (1 << 5);
-//    } else {
-//      PORTB &= ~(1 << 5);
-//    }
-//    return false;
-//  case BL3:
-//    if (record->event.pressed) {
-//      PORTB |= (1 << 6);
-//    } else {
-//      PORTB &= ~(1 << 6);
-//    }
-//    return false;
-//  case BL4:
-//    if (record->event.pressed) {
-//      PORTB |= (1 << 7);
-//    } else {
-//      PORTB &= ~(1 << 7);
-//    }
-//    return false;
-//  }
   return true;
 }
 
