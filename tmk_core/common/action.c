@@ -36,6 +36,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int tp_buttons;
 
+#ifdef RETRO_TAPPING
+int retro_tapping_counter = 0;
+#endif
+
 #ifdef FAUXCLICKY_ENABLE
 #include <fauxclicky.h>
 #endif
@@ -45,6 +49,9 @@ void action_exec(keyevent_t event)
     if (!IS_NOEVENT(event)) {
         dprint("\n---- action_exec: start -----\n");
         dprint("EVENT: "); debug_event(event); dprintln();
+#ifdef RETRO_TAPPING
+        retro_tapping_counter++;
+#endif
     }
 
 #ifdef FAUXCLICKY_ENABLE
@@ -57,7 +64,7 @@ void action_exec(keyevent_t event)
     fauxclicky_check();
 #endif
 
-#ifdef ONEHAND_ENABLE
+#ifdef SWAP_HANDS_ENABLE
     if (!IS_NOEVENT(event)) {
         process_hand_swap(&event);
     }
@@ -84,8 +91,9 @@ void action_exec(keyevent_t event)
 #endif
 }
 
-#ifdef ONEHAND_ENABLE
+#ifdef SWAP_HANDS_ENABLE
 bool swap_hands = false;
+bool swap_held = false;
 
 void process_hand_swap(keyevent_t *event) {
     static swap_state_row_t swap_state[MATRIX_ROWS];
@@ -124,6 +132,27 @@ __attribute__ ((weak))
 bool process_record_quantum(keyrecord_t *record) {
     return true;
 }
+
+#ifndef NO_ACTION_TAPPING
+// Allows for handling tap-hold actions immediately instead of waiting for TAPPING_TERM or another keypress.
+void process_record_tap_hint(keyrecord_t *record)
+{
+    action_t action = layer_switch_get_action(record->event.key);
+
+    switch (action.kind.id) {
+#ifdef SWAP_HANDS_ENABLE
+        case ACT_SWAP_HANDS:
+            switch (action.swap.code) {
+                case OP_SH_TAP_TOGGLE:
+                default:
+                    swap_hands = !swap_hands;
+                    swap_held = true;
+            }
+            break;
+#endif
+    }
+}
+#endif
 
 void process_record(keyrecord_t *record)
 {
@@ -505,8 +534,11 @@ void process_action(keyrecord_t *record, action_t action)
                     case BACKLIGHT_STEP:
                         backlight_step();
                         break;
-                    case BACKLIGHT_LEVEL:
-                        backlight_level(action.backlight.level);
+                    case BACKLIGHT_ON:
+                        backlight_level(BACKLIGHT_LEVELS);
+                        break;
+                    case BACKLIGHT_OFF:
+                        backlight_level(0);
                         break;
                 }
             }
@@ -514,7 +546,7 @@ void process_action(keyrecord_t *record, action_t action)
 #endif
         case ACT_COMMAND:
             break;
-#ifdef ONEHAND_ENABLE
+#ifdef SWAP_HANDS_ENABLE
         case ACT_SWAP_HANDS:
             switch (action.swap.code) {
                 case OP_SH_TOGGLE:
@@ -541,23 +573,37 @@ void process_action(keyrecord_t *record, action_t action)
     #ifndef NO_ACTION_TAPPING
                 case OP_SH_TAP_TOGGLE:
                     /* tap toggle */
-                    if (tap_count > 0) {
-                        if (!event.pressed) {
+
+                    if (event.pressed) {
+                        if (swap_held) {
+                            swap_held = false;
+                        } else {
                             swap_hands = !swap_hands;
                         }
                     } else {
-                        swap_hands = event.pressed;
+                        if (tap_count < TAPPING_TOGGLE) {
+                            swap_hands = !swap_hands;
+                        }
                     }
                     break;
                 default:
+                    /* tap key */
                     if (tap_count > 0) {
+                        if (swap_held) {
+                            swap_hands = !swap_hands; // undo hold set up in _tap_hint
+                            swap_held = false;
+                        }
                         if (event.pressed) {
                             register_code(action.swap.code);
                         } else {
                             unregister_code(action.swap.code);
+                            *record = (keyrecord_t){}; // hack: reset tap mode
                         }
                     } else {
-                        swap_hands = event.pressed;
+                        if (swap_held && !event.pressed) {
+                            swap_hands = !swap_hands; // undo hold set up in _tap_hint
+                            swap_held = false;
+                        }
                     }
     #endif
             }
@@ -584,6 +630,32 @@ void process_action(keyrecord_t *record, action_t action)
         default:
             break;
     }
+#endif
+
+#ifndef NO_ACTION_TAPPING
+  #ifdef RETRO_TAPPING
+  if (!is_tap_key(record->event.key)) {
+    retro_tapping_counter = 0;
+  } else {
+    if (event.pressed) {
+        if (tap_count > 0) {
+          retro_tapping_counter = 0;
+        } else {
+
+        }
+    } else {
+      if (tap_count > 0) {
+        retro_tapping_counter = 0;
+      } else {
+        if (retro_tapping_counter == 2) {
+          register_code(action.layer_tap.code);
+          unregister_code(action.layer_tap.code);
+        }
+        retro_tapping_counter = 0;
+      }
+    }
+  }
+  #endif
 #endif
 
 #ifndef NO_ACTION_ONESHOT
@@ -619,6 +691,7 @@ void register_code(uint8_t code)
 #endif
         add_key(KC_CAPSLOCK);
         send_keyboard_report();
+        wait_ms(100);
         del_key(KC_CAPSLOCK);
         send_keyboard_report();
     }
@@ -629,6 +702,7 @@ void register_code(uint8_t code)
 #endif
         add_key(KC_NUMLOCK);
         send_keyboard_report();
+        wait_ms(100);
         del_key(KC_NUMLOCK);
         send_keyboard_report();
     }
@@ -639,6 +713,7 @@ void register_code(uint8_t code)
 #endif
         add_key(KC_SCROLLLOCK);
         send_keyboard_report();
+        wait_ms(100);
         del_key(KC_SCROLLLOCK);
         send_keyboard_report();
     }
