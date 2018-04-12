@@ -6,7 +6,7 @@
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0xFEED
 #define PRODUCT_ID      0x6071
-#define DEVICE_VER      0x0001
+#define DEVICE_VER      0x0002
 #define MANUFACTURER    WoodKeys.click
 #define PRODUCT         BigSeries Single Keyboard
 #define DESCRIPTION     Single key board for Novelkeys Big Series Switch
@@ -20,10 +20,8 @@
 #define MATRIX_COL_PINS { B4 }
 #define UNUSED_PINS
 
-#define RGBLED_PINS { B5, B6, B7 }
-
 /* COL2ROW or ROW2COL */
-#define DIODE_DIRECTION COL2ROW
+#define DIODE_DIRECTION ROW2COL
 
 /* Set 0 if debouncing isn't needed */
 #define DEBOUNCING_DELAY 50
@@ -39,13 +37,7 @@
 #ifdef RGBLIGHT_ENABLE
 #define RGB_DI_PIN D3
 #define RGBLIGHT_ANIMATIONS
-#define RGBLED_NUM 3
-#endif
-
-#ifdef BACKLIGHT_ENABLE
-//#define BACKLIGHT_PIN B1
-#define BACKLIGHT_LEVELS 5
-#define BACKLIGHT_ON_STATE 1
+#define RGBLED_NUM 5
 #endif
 
 #endif

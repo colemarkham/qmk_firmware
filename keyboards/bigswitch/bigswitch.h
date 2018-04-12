@@ -4,9 +4,9 @@
 #include "quantum.h"
 
 #define KEYMAP( \
-	K00  \
+  K00  \
 ) { \
-	{ K00 }  \
+  { K00 }  \
 }
 
 #endif

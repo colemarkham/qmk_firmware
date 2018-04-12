@@ -38,7 +38,7 @@ void matrix_init_user(void) {
   DDRB |= (1 << 5) | (1 << 6) | (1 << 7);
   PORTB &= ~(1 << 5) & ~(1 << 6) & ~(1 << 7);
   if (!initialized){
-      debug_config.enable = true;
+//      debug_config.enable = true;
       dprintf("Initializing in matrix_scan_user");
       rgblight_enable();
       rgblight_mode(7);

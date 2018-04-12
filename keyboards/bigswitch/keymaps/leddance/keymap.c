@@ -17,9 +17,6 @@ enum {
   TD_TOGGLE = 0
 };
 
-void update_leds(void);
-uint8_t ledState = 0;
-
 void dance_toggle (qk_tap_dance_state_t *state, void *user_data) {
   if (state->count >= 2) {
     println("Double tapped, switching layers");
@@ -31,9 +28,6 @@ void dance_toggle (qk_tap_dance_state_t *state, void *user_data) {
   } else {
     print("Single tapped: ");
     if (layer_state_is(LED)) {
-      ledState = (ledState + 1) % 8;
-      xprintf("LED Layer, toggling value: %d\n", ledState);
-      update_leds();
 #ifdef RGBLIGHT_ENABLE
       if (!rgblight_config.enable) {
         rgblight_enable();
@@ -70,24 +64,7 @@ const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
 }
 
 
-void set_led(uint8_t pin, uint8_t enable) {
-  if (enable) {
-    PORTB |= (1 << pin);
-  } else {
-    PORTB &= ~(1 << pin);
-  }
-}
-
-void update_leds(void) {
-  for (uint8_t idx = 0; idx < 3; idx++){
-    set_led(idx+1, (ledState >> idx) & 1);
-  }
-}
-
 void matrix_init_user(void) {
-  /* set LED row pins to output and low */
-  DDRB |= (1 << 1) | (1 << 2) | (1 << 3);
-  PORTB &= ~(1 << 1) & ~(1 << 2) & ~(1 << 3);
 }
 
 void matrix_scan_user(void) {
@@ -98,13 +75,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   case KC_A:
     if (record->event.pressed) {
       SEND_STRING("This thing is BIG!!\n");
-      return false;
-    }
-    break;
-  case BL:
-    if (record->event.pressed) {
-      ledState = (ledState + 1) % 8;
-      update_leds();
       return false;
     }
     break;
