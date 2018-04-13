@@ -1,4 +1,4 @@
-#include "bigswitch.h"
+#include "../../bigseries.h"
 #include "print.h"
 
 extern rgblight_config_t rgblight_config;

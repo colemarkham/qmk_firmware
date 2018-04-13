@@ -1,4 +1,4 @@
-#include "bigswitch.h"
+#include "../../bigseries.h"
 
 //const uint8_t LED_PINS[] = RGBLED_PINS;
 

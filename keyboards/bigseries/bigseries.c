@@ -1,4 +1,4 @@
-#include "bigswitch.h"
+#include "bigseries.h"
 
 void matrix_scan_kb(void) {
   // Looping keyboard code goes here
