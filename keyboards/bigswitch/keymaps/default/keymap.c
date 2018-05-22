@@ -7,7 +7,7 @@ enum custom_keycodes {
   BL4
 };
 
-const uint8_t LED_PINS[] = LED_ROW_PINS;
+const uint8_t LED_PINS[] = RGBLED_PINS;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -44,7 +44,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
   case KC_A:
     if (record->event.pressed) {
-      SEND_STRING("Merry Christmas (a little late), from WoodKeys!!\n");
+      SEND_STRING("Howdy!!\n");
       return false;
     }
   }
