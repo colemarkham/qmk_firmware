@@ -33,7 +33,7 @@ bool is_keyboard_left(void) {
   #endif
 }
 
-bool is_keyboard_master(void)
+__attribute__((weak)) bool is_keyboard_master(void)
 {
 #ifdef __AVR__
   static enum { UNKNOWN, MASTER, SLAVE } usbstate = UNKNOWN;
