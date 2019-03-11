@@ -84,5 +84,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define BOOTMAGIC_LITE_ROW 0
 // #define BOOTMAGIC_LITE_COLUMN 0
 
-#define DRIVER_ADDR_1 0b0101000
+#define DRIVER_ADDR_1 0b1010000
+#define DRIVER_ADDR_2 0b1010000 // this is here for compliancy reasons.
+
 #define DRIVER_COUNT 1
