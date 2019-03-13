@@ -28,9 +28,6 @@ void keyboard_pre_init_kb(void) {
 }
 
 void matrix_init_kb(void) {
-  // JTAG disable for PORT F. write JTD bit twice within four cycles.
-  MCUCR |= (1<<JTD);
-  MCUCR |= (1<<JTD);
 
   matrix_init_user();
 };
@@ -43,8 +40,6 @@ void matrix_scan_kb(void) {
 }
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
-  debug_config.enable = 1;
-  dprintln("process_record_kb");
 	// put your per-action keyboard code here
 	// runs for every action, just before processing by the firmware
 
