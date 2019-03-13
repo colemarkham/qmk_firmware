@@ -127,8 +127,3 @@ bool is_keyboard_master(void)
 {
   return false;
 }
-
-void matrix_slave_scan_user(void) {
-  // This is here because normally the slave doesn't drive the rgb matrix
-  matrix_scan_quantum();
-}

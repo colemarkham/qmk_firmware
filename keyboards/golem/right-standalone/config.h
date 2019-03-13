@@ -1,5 +1,5 @@
 /* key matrix size */
-#define MATRIX_ROWS 10
+#define MATRIX_ROWS 5
 #define MATRIX_COLS 8
 
 /*
@@ -14,7 +14,6 @@
 */
 #define MATRIX_ROW_PINS { D4, D6, D7, B4, B5 }
 #define MATRIX_COL_PINS_RIGHT { B2, B3, B7, B1, F5, F4, F6, F7 }
-#define MATRIX_COL_PINS { B2, B3, B7, B1, F5, F4, F6, F7 }
 #define UNUSED_PINS
 
 // FIXME change this based on split backspace state
